@@ -79,8 +79,8 @@ services:
     image: quay.io/minio/minio:latest
     container_name: minio
     environment:
-      MINIO_ROOT_USER: root
-      MINIO_ROOT_PASSWORD: password
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     command: server --console-address ":9001" /data
     ports:
       - 9000:9000
