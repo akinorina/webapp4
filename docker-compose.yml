@@ -88,6 +88,29 @@ services:
     volumes:
       - ./minio/data:/data
 
+  #
+  # server app.
+  #
+  webapp4_server:
+    container_name: webapp4_server
+    build:
+      context: ../webapp4_server_nestjs
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+    environment:
+      # Database (MySQL)
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_DBNAME: ${DATABASE_DBNAME}
+    depends_on:
+      db:
+        condition: service_healthy
+
 networks:
   backend: {}
 
