@@ -2,3 +2,9 @@
 # git ignore files.
 #
 .env
+
+
+# MinIO
+minio/data/*
+!minio/data/.gitkeep
+
