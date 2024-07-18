@@ -87,6 +87,8 @@ services:
       - 9001:9001
     volumes:
       - ./minio/data:/data
+    networks:
+      - backend
 
   #
   # server app.
@@ -110,6 +112,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  #
+  # client app.
+  #
+  webapp4_client:
+    container_name: webapp4_client
+    build:
+      context: ../webapp4_client_vue3
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - backend
 
 networks:
   backend: {}
