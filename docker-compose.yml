@@ -8,7 +8,7 @@ services:
   db:
     container_name: db
     hostname: ${DATABASE_HOST}
-    image: mysql
+    image: mysql:9.0.1
     volumes:
       - database_data:/var/lib/mysql
       - ./db/initdb.d:/docker-entrypoint-initdb.d
@@ -24,10 +24,10 @@ services:
       - backend
     healthcheck:
       test: mysqladmin ping -h0.0.0.0 -P3306 -u$$MYSQL_USER -p$$MYSQL_PASSWORD
-      interval: 5s
-      timeout: 5s
+      start_period: 3s
       retries: 3
-      start_period: 5s
+      timeout: 1s
+      interval: 1s
 
   #
   # phpMyAdmin
@@ -112,6 +112,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'curl http://localhost:3000/api || exit 1']
+      start_period: 3s
+      retries: 3
+      timeout: 1s
+      interval: 1s
 
   #
   # client app.
@@ -125,6 +131,9 @@ services:
       - 80:80
     networks:
       - backend
+    depends_on:
+      webapp4_server:
+        condition: service_healthy
 
 networks:
   backend: {}
