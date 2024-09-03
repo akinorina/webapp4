@@ -4,6 +4,9 @@
 .env
 *.local
 
+# logs
+*.log
+
 # MinIO
 minio/data/*
 !minio/data/.gitkeep
