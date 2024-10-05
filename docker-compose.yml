@@ -10,7 +10,7 @@ services:
     hostname: ${DATABASE_HOST}
     image: mysql:9.0.1
     volumes:
-      - database_data:/var/lib/mysql
+      - ./db/data:/var/lib/mysql
       - ./db/initdb.d:/docker-entrypoint-initdb.d
     ports:
       - ${DATABASE_PORT}:3306
@@ -142,6 +142,5 @@ networks:
   backend: {}
 
 volumes:
-  database_data: null
   phpmyadmin_data: null
   mail_data: null
