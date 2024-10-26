@@ -1,0 +1,54 @@
+#
+# docker-compose.yml
+#
+services:
+  #
+  # server app.
+  #
+  webapp4_server:
+    container_name: webapp4_server
+    build:
+      context: ../webapp4_server_nestjs
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+    environment:
+      # Database (MySQL)
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_DBNAME: ${DATABASE_DBNAME}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'curl http://localhost:3000/api || exit 1']
+      start_period: 3s
+      retries: 3
+      timeout: 1s
+      interval: 1s
+
+  #
+  # client app.
+  #
+  webapp4_client:
+    container_name: webapp4_client
+    build:
+      context: ../webapp4_client_vue3
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/log:/var/log/nginx
+    networks:
+      - backend
+    depends_on:
+      webapp4_server:
+        condition: service_healthy
+
+networks:
+  backend: {}
