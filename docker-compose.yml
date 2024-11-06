@@ -90,9 +90,24 @@ services:
     networks:
       - backend
 
+  #
+  # forward proxy
+  #
+  squid:
+    container_name: squid
+    image: ubuntu/squid
+    ports:
+      - '3128:3128'
+    environment:
+      TZ: 'UTC'
+    volumes:
+      - squid_data:/var/spool/squid
+      - ./squid/squid.conf:/etc/squid/squid.conf:ro
+
 networks:
   backend: {}
 
 volumes:
   phpmyadmin_data: null
   mail_data: null
+  squid_data: null
