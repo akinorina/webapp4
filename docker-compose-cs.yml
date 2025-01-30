@@ -8,12 +8,14 @@ services:
   webapp4_server:
     container_name: webapp4_server
     build:
-      context: ../webapp4_server_nestjs
+      context: ../webapp4_server
       dockerfile: Dockerfile
     ports:
       - 3000:3000
     networks:
       - backend
+    volumes:
+      - ./logs:/app/logs
     environment:
       # Database (MySQL)
       DATABASE_HOST: ${DATABASE_HOST}
@@ -37,7 +39,7 @@ services:
   webapp4_client:
     container_name: webapp4_client
     build:
-      context: ../webapp4_client_vue3
+      context: ../webapp4_client
       dockerfile: Dockerfile
     ports:
       - 80:80
